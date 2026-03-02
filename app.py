@@ -154,7 +154,12 @@ def save_output(today: str, content: str) -> Path:
 # ─── サイドバー ─────────────────────────────────────────────
 with st.sidebar:
     st.header("⚙️ 設定")
-    env_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    # Streamlit Cloud の Secrets → 環境変数 → 手入力 の順で読み込む
+    env_key = (
+        st.secrets.get("ANTHROPIC_API_KEY", "")
+        if hasattr(st, "secrets")
+        else os.environ.get("ANTHROPIC_API_KEY", "")
+    )
     api_key = st.text_input(
         "Anthropic API Key",
         value=env_key,
