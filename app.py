@@ -63,38 +63,29 @@ def extract_sources(text: str) -> list[str]:
 
 
 def build_prompt(today: str) -> str:
-    return f"""あなたはAI・Salesforce・SaaS領域の深い知見を持つ専門家アシスタントです。
-今日の日付は {today} です。以下の2ステップを実行してください。
+    return f"""今日の日付は {today} です。
 
-### 【ステップ1：最新トレンドの収集と選定】
-以下の検索クエリで検索し、AI・Salesforce・SaaS業務改善に関する本日最新のニュースを収集してください：
-1. site:news.ycombinator.com AI SaaS agents latest {today}
-2. Salesforce Agentforce news announcement {today}
-3. AI SaaS business automation breaking news {today}
+以下の検索クエリでAI・Salesforce・SaaS関連の最新ニュースを1件検索し、最も面白いと思った記事を1つ選んでください：
+1. Salesforce Agentforce news {today}
+2. AI SaaS news {today}
 
-収集した情報から、ビジネスインパクトが最も大きいトピックを1つだけ選定し、以下の形式でまとめてください：
-🔥 本日のトピック：[タイトル]
-ソース: [URL（必ず記載）]
-概要: [何が起きたか]
-ビジネスインパクト: [なぜ重要か]
-
-### 【ステップ2：Threads投稿案を1本作成】
-選定したトピックで投稿案を1本だけ作成してください。
-前後に必ず「---THREADS POST 1---」と「---END---」を入れてください：
+選んだ記事をもとに、Threads投稿文を1本書いてください。
+投稿の前後に必ず「---THREADS POST 1---」と「---END---」を入れてください。
 
 ---THREADS POST 1---
-【タイトル（絵文字＋インパクト）】
+[記事の要約：何が起きたか、2〜3文でシンプルに]
 
-[フック：1-2行]
+[感想：読んでどう思ったか、自分の言葉で率直に]
 
-[本文：専門的だがフランクなトーン、3-5段落]
+ソース：[記事のURL]
 
-[→ 今日からできること：2-3点]
+#AI #Salesforce #SaaS
+---END---
 
-[エンゲージメント質問]
-
-#AI #Salesforce #SaaS #業務改善 #AIエージェント
----END---"""
+文体の注意：
+- テンプレっぽい言い回しは使わない
+- 「今日からできること」「エンゲージメント質問」などの型は不要
+- 普通に人が書くようなナチュラルなトーンで"""
 
 
 def generate(api_key: str, today: str) -> str:

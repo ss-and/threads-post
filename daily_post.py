@@ -24,51 +24,29 @@ def get_today_jst() -> str:
 
 
 def build_prompt(today: str) -> str:
-    return f"""あなたはAI・Salesforce・SaaS領域の深い知見を持つ専門家アシスタントです。
-今日の日付は {today} です。以下の2ステップを順番に実行してください。
+    return f"""今日の日付は {today} です。
 
----
+以下の検索クエリでAI・Salesforce・SaaS関連の最新ニュースを1件検索し、最も面白いと思った記事を1つ選んでください：
+1. Salesforce Agentforce news {today}
+2. AI SaaS news {today}
 
-### 【ステップ1：最新トレンドの収集と選定】
-
-以下の検索クエリで検索し、AI・Salesforce・SaaS業務改善に関する**本日最新の**ニュースを収集してください：
-
-1. `site:news.ycombinator.com AI SaaS agents latest {today}`
-2. `Salesforce Agentforce news announcement {today}`
-3. `AI SaaS business automation breaking news {today}`
-
-収集した情報から、**ビジネスインパクトが最も大きい・最も目新しい**トピックを1つだけ選定し、以下の形式でまとめてください：
-
-🔥 本日のトピック：[タイトル]
-ソース: [URL]
-概要（1-2行）: [何が起きたか]
-ビジネスインパクト: [なぜ重要か]
-
----
-
-### 【ステップ2：Threads投稿案を1本作成】
-
-選定したトピックで、以下のフォーマットで投稿案を1本だけ作成してください。
-投稿案の前後に必ず「---THREADS POST 1---」と「---END---」を入れてください：
+選んだ記事をもとに、Threads投稿文を1本書いてください。
+投稿の前後に必ず「---THREADS POST 1---」と「---END---」を入れてください。
 
 ---THREADS POST 1---
-【投稿タイトル（絵文字＋インパクトある一言）】
+[記事の要約：何が起きたか、2〜3文でシンプルに]
 
-[フック：驚きの事実 or 共感を呼ぶ問いかけ（1-2行）]
+[感想：読んでどう思ったか、自分の言葉で率直に]
 
-[本文：専門的だがフランクなトーンで3-5段落。専門用語は噛み砕く]
+ソース：[記事のURL]
 
-[実務アクション：「→ 今日からできること」を2-3点]
-
-[エンゲージメント質問：「あなたの会社ではどうしてる？」系の問いかけ]
-
-#AI #Salesforce #SaaS #業務改善 #AIエージェント
+#AI #Salesforce #SaaS
 ---END---
 
-**トーン要件：**
-- 専門的かつフランクで読みやすい
-- 驚き・共感・実用性のバランス
-- 最後は必ず読者参加型の問いかけで締める"""
+文体の注意：
+- テンプレっぽい言い回しは使わない
+- 「今日からできること」「エンゲージメント質問」などの型は不要
+- 普通に人が書くようなナチュラルなトーンで"""
 
 
 def extract_all_text(content_blocks) -> str:
