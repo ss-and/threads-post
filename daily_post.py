@@ -25,47 +25,33 @@ def get_today_jst() -> str:
 
 def build_prompt(today: str) -> str:
     return f"""あなたはAI・Salesforce・SaaS領域の深い知見を持つ専門家アシスタントです。
-今日の日付は {today} です。以下の3ステップを順番に実行してください。
+今日の日付は {today} です。以下の2ステップを順番に実行してください。
 
 ---
 
-### 【ステップ1：最新トレンドの収集】
+### 【ステップ1：最新トレンドの収集と選定】
 
-以下の検索クエリで同時並行に検索し、AI・Salesforce・SaaS業務改善に関する**本日最新の**ニュースや議論を収集してください：
+以下の検索クエリで検索し、AI・Salesforce・SaaS業務改善に関する**本日最新の**ニュースを収集してください：
 
 1. `site:news.ycombinator.com AI SaaS agents latest {today}`
-2. `Reddit r/artificial r/salesforce r/SaaS trending discussion {today}`
-3. `Salesforce Agentforce news announcement {today}`
-4. `AI SaaS business automation breaking news {today}`
-5. `Hacker News top AI productivity enterprise {today}`
+2. `Salesforce Agentforce news announcement {today}`
+3. `AI SaaS business automation breaking news {today}`
 
-収集した情報をもとに、**ビジネスインパクトが大きい・目新しい・議論を呼ぶ**トップ3を選定してください。
+収集した情報から、**ビジネスインパクトが最も大きい・最も目新しい**トピックを1つだけ選定し、以下の形式でまとめてください：
 
----
-
-### 【ステップ2：トップ3トピックの提示とダイジェスト作成】
-
-選定した3トピックについて、それぞれ以下の形式でまとめてください：
-
-```
-🔥 Topic [番号]：[タイトル]
+🔥 本日のトピック：[タイトル]
 ソース: [URL]
 概要（1-2行）: [何が起きたか]
 ビジネスインパクト: [なぜ重要か]
-```
-
-各ダイジェストに含める要素：
-- **ニュースの核心**：何が起きたのか（3-5文）
-- **専門家の視点**：AIやSalesforceエコシステムへの影響（具体的に）
-- **実務への応用**：SaaSユーザー・ビジネスパーソンがすぐできるアクション（箇条書き3点）
 
 ---
 
-### 【ステップ3：Threads投稿案の作成】
+### 【ステップ2：Threads投稿案を1本作成】
 
-各トピックについて、以下のフォーマットでThreads投稿案を作成してください：
+選定したトピックで、以下のフォーマットで投稿案を1本だけ作成してください。
+投稿案の前後に必ず「---THREADS POST 1---」と「---END---」を入れてください：
 
-```
+---THREADS POST 1---
 【投稿タイトル（絵文字＋インパクトある一言）】
 
 [フック：驚きの事実 or 共感を呼ぶ問いかけ（1-2行）]
@@ -77,7 +63,7 @@ def build_prompt(today: str) -> str:
 [エンゲージメント質問：「あなたの会社ではどうしてる？」系の問いかけ]
 
 #AI #Salesforce #SaaS #業務改善 #AIエージェント
-```
+---END---
 
 **トーン要件：**
 - 専門的かつフランクで読みやすい

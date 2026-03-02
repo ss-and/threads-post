@@ -63,46 +63,37 @@ def extract_sources(text: str) -> list[str]:
 
 
 def build_prompt(today: str) -> str:
-    # f-string 内で {n} をそのまま出力したいので {{ }} でエスケープ
     return f"""あなたはAI・Salesforce・SaaS領域の深い知見を持つ専門家アシスタントです。
-今日の日付は {today} です。以下の3ステップを実行してください。
+今日の日付は {today} です。以下の2ステップを実行してください。
 
-### 【ステップ1：最新トレンドの収集】
+### 【ステップ1：最新トレンドの収集と選定】
 以下の検索クエリで検索し、AI・Salesforce・SaaS業務改善に関する本日最新のニュースを収集してください：
 1. site:news.ycombinator.com AI SaaS agents latest {today}
-2. Reddit r/artificial r/salesforce r/SaaS trending discussion {today}
-3. Salesforce Agentforce news announcement {today}
-4. AI SaaS business automation breaking news {today}
-5. Hacker News top AI productivity enterprise {today}
+2. Salesforce Agentforce news announcement {today}
+3. AI SaaS business automation breaking news {today}
 
-### 【ステップ2：トップ3トピックのダイジェスト】
-選定した3トピックを以下の形式でまとめてください：
-🔥 Topic [番号]：[タイトル]
+収集した情報から、ビジネスインパクトが最も大きいトピックを1つだけ選定し、以下の形式でまとめてください：
+🔥 本日のトピック：[タイトル]
 ソース: [URL（必ず記載）]
 概要: [何が起きたか]
 ビジネスインパクト: [なぜ重要か]
-ダイジェスト（ニュースの核心・専門家の視点・実務への応用）
 
-### 【ステップ3：Threads投稿案3本の作成】
-各トピックについて以下の形式で投稿案を作成してください。
-投稿案の区切りには必ず「---THREADS POST {{n}}---」(n=1,2,3) というマーカーを入れてください：
+### 【ステップ2：Threads投稿案を1本作成】
+選定したトピックで投稿案を1本だけ作成してください。
+前後に必ず「---THREADS POST 1---」と「---END---」を入れてください：
 
 ---THREADS POST 1---
 【タイトル（絵文字＋インパクト）】
 
 [フック：1-2行]
 
-[本文：専門的だがフランクなトーン]
+[本文：専門的だがフランクなトーン、3-5段落]
 
 [→ 今日からできること：2-3点]
 
 [エンゲージメント質問]
 
 #AI #Salesforce #SaaS #業務改善 #AIエージェント
----THREADS POST 2---
-（同様）
----THREADS POST 3---
-（同様）
 ---END---"""
 
 
@@ -268,22 +259,19 @@ if st.session_state.posts:
 
     st.divider()
 
-    # ── 投稿案（タブ） ──────────────────────────────────────
+    # ── 投稿案（1本） ───────────────────────────────────────
     st.subheader("📱 Threads投稿案")
     st.caption("テキストエリアで編集 → 全選択してコピー → Threadsへ貼り付け")
 
-    tab_labels = [f"投稿案 {i+1}" for i in range(len(st.session_state.posts))]
-    tabs = st.tabs(tab_labels)
-    for i, (tab, post) in enumerate(zip(tabs, st.session_state.posts), 1):
-        with tab:
-            edited = st.text_area(
-                f"post_{i}",
-                value=post,
-                height=420,
-                key=f"post_{i}_{st.session_state.loaded_date}",
-                label_visibility="collapsed",
-            )
-            st.caption(f"文字数: {len(edited)} 文字")
+    post = st.session_state.posts[0] if st.session_state.posts else ""
+    edited = st.text_area(
+        "post_1",
+        value=post,
+        height=460,
+        key=f"post_1_{st.session_state.loaded_date}",
+        label_visibility="collapsed",
+    )
+    st.caption(f"文字数: {len(edited)} 文字")
 
     st.divider()
 
